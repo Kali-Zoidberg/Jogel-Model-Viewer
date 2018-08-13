@@ -21,7 +21,7 @@ public class Render implements GLEventListener {
 	
 	@Override
 	public void display(GLAutoDrawable glDrawable) {
-		System.out.println("Display called");
+		System.out.println("Display called");	
 			
 	}
 

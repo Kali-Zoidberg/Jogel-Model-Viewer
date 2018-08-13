@@ -10,40 +10,43 @@ public class RenderModel extends Render{
 
 	private GLU glu = new GLU();
 	private ArrayList<Vertex> vertices_list = null;
+	private Point4D rotation = new Point4D(0, 0.0,0.0,0.0);
 	
 	RenderModel(ArrayList<Vertex> vertex_list) {
 		setVerticesList(vertex_list);
 	}
 	
 	public void display(GLAutoDrawable glDrawable) {
-		
-		final GL2 gl = glDrawable.getGL().getGL2();
+		GL2 gl = glDrawable.getGL().getGL2();
 		
 		gl.glEnable(GL2.GL_LIGHTING); 
 		gl.glEnable(GL2.GL_LIGHT0);  
 		gl.glEnable(GL2.GL_NORMALIZE); 
-
+		gl.glEnable(GL2.GL_CULL_FACE);
+	
 		float[] ambientLight = { 0.1f, 0.f, 0.f,0f };  // weak RED ambient 
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambientLight, 0); 
 
 		float[] diffuseLight = { 1f,2f,1f,0f };  // multicolor diffuse 
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuseLight, 0); 
 		
-		float rquad = -25;
 		float x = 0,y = 0,z = 0, nx = 0, ny = 0, nz = 0;
 		
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); //Provides a bitwise operation to create a color buffer and depth buffer.
 		gl.glLoadIdentity(); //reset the view
 		gl.glTranslatef(-1.5f, 0.0f, -6f); //Places the object onto the screen
-	    gl.glRotatef( rquad, 1.0f, 1.0f, 1.0f ); // Rotate The Cube On X, Y & Z
-
+	    gl.glRotatef( (float) rotation.getW(), 
+	    		(float) rotation.getX(), 
+	    		(float) rotation.getY(), 
+	    		(float) rotation.getZ()); // Rotate The Cube On X, Y & Z
+	    
 	    gl.glBegin(GL2.GL_TRIANGLES);
 
 		/**
 		 * Loops throughout the vertex list. After the 3rd vertex, a new triangle is rendered
 		 */
 		
-		for (int i = 1; i <= vertices_list.size(); ++i) { 
+		for (int i = 1; i < vertices_list.size(); ++i) { 
 			/*if (i % 3 == 0) {
 				
 				if (i > 0)
@@ -70,10 +73,11 @@ public class RenderModel extends Render{
 				gl.glColor3f(0, ((int)(Math.random() * 3000) + 1) % 255, 0);
 		
 		}
-	
+		gl.glLoadIdentity(); //reset the view
+
 		gl.glEnd();
 		gl.glFlush();
-		
+
 	}
 	
 	/**
@@ -89,6 +93,19 @@ public class RenderModel extends Render{
 	 */
 	public void setVerticesList(ArrayList<Vertex> vertices_list) {
 		this.vertices_list = vertices_list;
+	}
+	
+	public Point3D getRotation()
+	{
+		return rotation;
+	}
+	/**
+	 * Sets the rotation of the model.
+	 * @param rotation Rotates the model.
+	 */
+	public void setRotation(Point4D rotation)
+	{
+		this.rotation = new Point4D(rotation);
 	}
 
 }
